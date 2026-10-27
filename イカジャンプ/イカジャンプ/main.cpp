@@ -13,9 +13,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 	//Game‚ğŒÄ‚Ño‚·
 	Game game;
+	game.Load();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
 		ClearDrawScreen();
+		game.Update();
 		//•`‰æ
 		game.Draw();
 		ScreenFlip();

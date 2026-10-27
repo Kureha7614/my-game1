@@ -8,6 +8,8 @@ private:
 	BackGround background;
 	Ground ground;
 public:
+	void Load();
 	void Draw();
+	void Update();
 };
 

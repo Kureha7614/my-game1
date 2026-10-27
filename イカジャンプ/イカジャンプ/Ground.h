@@ -5,7 +5,8 @@ class Ground
 private:
 	int width = 200;
 	int height = 25;
-	int x, y;
+	int x = 140;
+	int y = 750;
 public:
 	void Draw();
 };
