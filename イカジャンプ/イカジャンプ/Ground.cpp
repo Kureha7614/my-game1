@@ -1,6 +1,12 @@
 #include "Ground.h"
 
+void Ground::Load()
+{
+	imageHandle = LoadGraph("image/Ground.png");
+}
+
 void Ground::Draw()
 {
-	DrawBox(x, y, x + width, y + height, GetColor(239, 160, 203), TRUE);
+	DrawExtendGraph(x, y, x + width, y + height,imageHandle, TRUE);
+
 }

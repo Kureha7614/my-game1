@@ -3,6 +3,7 @@
 void Game::Load()
 {
 	background.Load();
+	ground.Load();
 }
 
 void Game::Draw()
