@@ -24,3 +24,22 @@ void Character::Draw()
     );
 
 }
+
+void Character::Update()
+{
+    if (CheckHitKey(KEY_INPUT_A) || CheckHitKey(KEY_INPUT_LEFT))
+    {
+        playerX -= 5;
+    }
+    if (CheckHitKey(KEY_INPUT_D) || CheckHitKey( KEY_INPUT_RIGHT))
+    {
+        playerX += 5;
+    }
+    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_UP))
+    {
+
+        PushStartTime = GetNowCount();
+        PushCount = GetNowCount() - PushStartTime;
+        if(PushCount < )
+    }
+}
