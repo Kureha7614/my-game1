@@ -1,45 +1,75 @@
-#include "Character.h"
+ï»¿#include "Character.h"
 #include "DxLib.h"
 
 void Character::Load()
 {
-    // ƒXƒvƒ‰ƒCƒgƒV[ƒg‘S‘Ì‚ğ“Ç‚İ‚Ş
     imageHandle = LoadGraph("image/spreadsheet.png");
 }
 
 void Character::Draw()
 {
-    if (imageHandle == -1)
-    {
-        return;
-    }
-
-    // ¶ã‚Ì—§‚¿p‚ğ1ƒRƒ}‚¾‚¯•`‰æ‚·‚é
-    DrawRectExtendGraph(
-        playerX, playerY,           // ‰æ–Êã‚Ì¶ã
-        playerX + 80, playerY + 90, // ‰æ–Êã‚Ì‰E‰ºi•80E‚‚³90j
-        20, 20,                    // Œ³‰æ‘œ‚ÌØ‚èo‚µˆÊ’u
-        160, 180,                  // Œ³‰æ‘œ‚ÌØ‚èo‚µƒTƒCƒY
-        imageHandle, TRUE
-    );
-
+    if (imageHandle == -1) return;
+    const int drawY = static_cast<int>(playerY);
+    DrawRectExtendGraph(playerX, drawY, playerX + 80, drawY + 90,
+        20, 20, 160, 180, imageHandle, TRUE);
 }
 
 void Character::Update()
 {
-    if (CheckHitKey(KEY_INPUT_A) || CheckHitKey(KEY_INPUT_LEFT))
-    {
-        playerX -= 5;
-    }
-    if (CheckHitKey(KEY_INPUT_D) || CheckHitKey( KEY_INPUT_RIGHT))
-    {
-        playerX += 5;
-    }
-    if (CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_UP))
-    {
+    previousY = playerY;
+    const int previousX = playerX;
+    if (CheckHitKey(KEY_INPUT_A) || CheckHitKey(KEY_INPUT_LEFT)) playerX -= 5;
+    if (CheckHitKey(KEY_INPUT_D) || CheckHitKey(KEY_INPUT_RIGHT)) playerX += 5;
 
-        PushStartTime = GetNowCount();
+    const bool jumpPressed = CheckHitKey(KEY_INPUT_SPACE) || CheckHitKey(KEY_INPUT_UP);
+    if (onGround && jumpPressed)
+    {
+        if (!isCharging)
+        {
+            PushStartTime = GetNowCount();
+            isCharging = true;
+        }
         PushCount = GetNowCount() - PushStartTime;
-        if(PushCount < )
+        if (PushCount > 3000) PushCount = 3000;
+    }
+    else if (isCharging)
+    {
+        if (onGround && !jumpPressed)
+        {
+            PushCount = GetNowCount() - PushStartTime;
+            if (PushCount > 3000) PushCount = 3000;
+            // çŸ­æŠ¼ã—ã¯ -9ã€3ç§’ãŸã‚ã‚‹ã¨ -15.5
+            velocityY = -(9.0f + 6.5f * (PushCount / 3000.0f));
+            onGround = false;
+        }
+        isCharging = false;
+        PushCount = 0;
+    }
+
+    // 1ç§’ã«60å›æ›´æ–°ã™ã‚‹ã€‚ç”»é¢ã®ä¸‹æ–¹å‘ãŒãƒ—ãƒ©ã‚¹
+    velocityY += 0.5f;
+    playerY += velocityY;
+    state = onGround ? (playerX == previousX ? State::Idle : State::Run)
+                     : (velocityY < 0.0f ? State::Jump : State::Fall);
+}
+
+void Character::CheckLanding(float left, float right, float top)
+{
+    // èƒ´ä½“ãƒ»è¶³ã®å¹…ã§æ¨ªã®é‡ãªã‚Šã‚’åˆ¤å®šã™ã‚‹
+    const bool overlaps = playerX + 55 > left && playerX + 25 < right;
+    onGround = false;
+    // ä¸Šæ˜‡ä¸­ã‚„ã€è¶³å ´ã®ä¸‹ã‹ã‚‰ã®æ¥è§¦ã¯é€šã‚ŠæŠœã‘ã‚‹
+    if (velocityY >= 0.0f && overlaps &&
+        previousY + FootOffset <= top && playerY + FootOffset >= top)
+    {
+        playerY = top - FootOffset;
+        velocityY = 0.0f;
+        onGround = true;
+        if (state == State::Jump || state == State::Fall) state = State::Idle;
+    }
+    if (!onGround)
+    {
+        isCharging = false;
+        state = velocityY < 0.0f ? State::Jump : State::Fall;
     }
 }

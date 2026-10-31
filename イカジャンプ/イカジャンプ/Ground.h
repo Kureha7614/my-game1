@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include"DxLib.h"
 class Ground
 {
@@ -11,5 +11,9 @@ private:
 public:
 	void Load();
 	void Draw();
+	float GetLeft() const { return static_cast<float>(x); }
+	float GetRight() const { return static_cast<float>(x + width); }
+	// 画像上端から約28%は透明な余白
+	float GetTop() const { return y + height * 0.28f; }
 };
 

@@ -17,4 +17,5 @@ void Game::Draw()
 void Game::Update()
 {
 	character.Update();
+	character.CheckLanding(ground.GetLeft(), ground.GetRight(), ground.GetTop());
 }
