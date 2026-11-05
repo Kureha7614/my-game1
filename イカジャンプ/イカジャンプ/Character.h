@@ -1,9 +1,11 @@
 ﻿#pragma once
+#include"Animation.h"
 class Character
 {
 private:
     enum class State { Idle, Run, Jump, Fall };
     State state = State::Idle;
+    Animation animation;
     int playerX = 200;
     float playerY = 696.0f;
     float previousY = 696.0f;

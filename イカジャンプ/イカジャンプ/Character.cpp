@@ -4,18 +4,29 @@
 void Character::Load()
 {
     imageHandle = LoadGraph("image/spreadsheet.png");
+    animation.SetFrameCount(8);  // 例: 8コマのアニメーション
 }
 
 void Character::Draw()
 {
+    int sourceX = 20, sourceY = 20;
+
+	int currentFrame = animation.GetCurrentFrame();  // 現在のコマ番号を取得
+
+	sourceX += currentFrame * 180;  // コマ番号に応じてX座標を変更
+
     if (imageHandle == -1) return;
     const int drawY = static_cast<int>(playerY);
     DrawRectExtendGraph(playerX, drawY, playerX + 80, drawY + 90,
-        20, 20, 160, 180, imageHandle, TRUE);
+        sourceX, sourceY, 160, 180, imageHandle, TRUE);
+
+   
 }
 
 void Character::Update()
 {
+	animation.Update();
+
     previousY = playerY;
     const int previousX = playerX;
     if (CheckHitKey(KEY_INPUT_A) || CheckHitKey(KEY_INPUT_LEFT)) playerX -= 5;
