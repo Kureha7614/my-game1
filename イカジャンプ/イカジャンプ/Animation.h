@@ -2,10 +2,10 @@
 class Animation
 {
 private:
-	int currentFrame = 0;  // 迴ｾ蝨ｨ縺ｮ繧ｳ繝樒分蜿ｷ
-	int frameCount = 1;    // 菴ｿ逕ｨ縺吶ｋ繧ｳ繝樊焚
-	int frameTimer = 0;    // 譖ｴ譁ｰ蝗樊焚繧呈焚縺医ｋ
-	int frameInterval = 32; // 32蝗樊峩譁ｰ縺励◆繧画ｬ｡縺ｮ繧ｳ繝槭∈
+	int currentFrame = 0;  // 現在のコマ番号
+	int frameCount = 1;    // 使用するコマ数
+	int frameTimer = 0;    // 更新回数を数える
+	int frameInterval = 32; // 32回更新したら次のコマへ
 public:
 	void Update();
 	void Reset();

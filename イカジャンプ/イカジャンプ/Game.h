@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include"DxLib.h"
 #include"BackGround.h"
 #include"Ground.h"

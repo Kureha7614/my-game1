@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include"Animation.h"
 class Character
 {
@@ -10,9 +10,9 @@ private:
     float playerY = 696.0f;
     float previousY = 696.0f;
     float velocityY = 0.0f;
-    // æç”»é ˜åŸŸã«ã¯ä½™ç™½ãŒã‚ã‚‹ãŸã‚ã€è¦‹ãˆã‚‹é´åº•ã‚’è¶³å…ƒã¨ã™ã‚‹
+    // •`‰æ—Ìˆæ‚É‚Í—]”’‚ª‚ ‚é‚½‚ßAŒ©‚¦‚éŒC’ê‚ğ‘«Œ³‚Æ‚·‚é
     static constexpr float FootOffset = 82.0f;
-    int PushCount = 0;     // ãŸã‚ãŸæ™‚é–“ï¼ˆãƒŸãƒªç§’ï¼‰
+    int PushCount = 0;     // ‚½‚ß‚½ŠÔiƒ~ƒŠ•bj
     int PushStartTime = 0;
     bool isCharging = false;
     bool onGround = true;

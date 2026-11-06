@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include"DxLib.h"
 class Ground
 {
@@ -13,7 +13,7 @@ public:
 	void Draw();
 	float GetLeft() const { return static_cast<float>(x); }
 	float GetRight() const { return static_cast<float>(x + width); }
-	// ç”»åƒä¸Šç«¯ã‹ã‚‰ç´„28%ã¯é€æ˜ãªä½™ç™½
+	// ‰æ‘œã’[‚©‚ç–ñ28%‚Í“§–¾‚È—]”’
 	float GetTop() const { return y + height * 0.28f; }
 };
 

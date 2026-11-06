@@ -1,26 +1,51 @@
-ï»¿#include "Character.h"
+#include "Character.h"
 #include "DxLib.h"
 
 void Character::Load()
 {
     imageHandle = LoadGraph("image/spreadsheet.png");
-    animation.SetFrameCount(8);  // ä¾‹: 8ã‚³ãƒã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
+    animation.SetFrameCount(8);  // —á: 8ƒRƒ}‚ÌƒAƒjƒ[ƒVƒ‡ƒ“
 }
+
+
 
 void Character::Draw()
 {
-    int sourceX = 20, sourceY = 20;
-
-	int currentFrame = animation.GetCurrentFrame();  // ç¾åœ¨ã®ã‚³ãƒç•ªå·ã‚’å–å¾—
-
-	sourceX += currentFrame * 180;  // ã‚³ãƒç•ªå·ã«å¿œã˜ã¦Xåº§æ¨™ã‚’å¤‰æ›´
-
     if (imageHandle == -1) return;
-    const int drawY = static_cast<int>(playerY);
-    DrawRectExtendGraph(playerX, drawY, playerX + 80, drawY + 90,
-        sourceX, sourceY, 160, 180, imageHandle, TRUE);
 
-   
+    const int currentFrame = animation.GetCurrentFrame();
+    // Œ³‰æ‘œ‚É‡‚í‚¹‚½‰¡‚ÌŠÔŠuB—]”’‚àŠÜ‚ß‚Ä1ƒRƒ}‚ğØ‚èo‚·
+    int sourceX = 12 + currentFrame * 178;
+    int sourceY = 20;
+    int sourceHeight = 180;
+
+    if (state == State::Run)
+    {
+		if (CheckHitKey(KEY_INPUT_A) || CheckHitKey(KEY_INPUT_LEFT)) sourceY = 185; // 2’i–ÚF¶‘–‚è
+		else
+        sourceY = 365; // 3’i–ÚF‘–‚è
+    }
+    else if (state == State::Jump || state == State::Fall)
+    {
+		sourceX = 12 + 6 * 178; // ƒWƒƒƒ“ƒv‚Ìƒ|[ƒY‚Í8ƒRƒ}–Ú
+        sourceY = 545; // 4’i–ÚFƒWƒƒƒ“ƒv‚Ìƒ|[ƒY
+        sourceHeight = 185;
+    }
+
+    const int drawY = static_cast<int>(playerY);
+	if (CheckHitKey(KEY_INPUT_A) || CheckHitKey(KEY_INPUT_LEFT))
+	{
+		// ¶Œü‚«‚É•`‰æ‚·‚éê‡‚ÍA‰æ‘œ‚ğ”½“]‚³‚¹‚é
+		DrawRectExtendGraph(playerX + 80, drawY, playerX, drawY + 90,
+			sourceX, sourceY, 178, sourceHeight, imageHandle, TRUE);
+	}
+	else
+	{
+		// ‰EŒü‚«‚É•`‰æ‚·‚éê‡‚ÍA’Êí’Ê‚è•`‰æ‚·‚é
+		DrawRectExtendGraph(playerX, drawY, playerX + 80, drawY + 90,
+			sourceX, sourceY, 178, sourceHeight, imageHandle, TRUE);
+	}
+    
 }
 
 void Character::Update()
@@ -49,7 +74,7 @@ void Character::Update()
         {
             PushCount = GetNowCount() - PushStartTime;
             if (PushCount > 3000) PushCount = 3000;
-            // çŸ­æŠ¼ã—ã¯ -9ã€3ç§’ãŸã‚ã‚‹ã¨ -15.5
+            // ’Z‰Ÿ‚µ‚Í -9A3•b‚½‚ß‚é‚Æ -15.5
             velocityY = -(9.0f + 6.5f * (PushCount / 3000.0f));
             onGround = false;
         }
@@ -57,7 +82,7 @@ void Character::Update()
         PushCount = 0;
     }
 
-    // 1ç§’ã«60å›æ›´æ–°ã™ã‚‹ã€‚ç”»é¢ã®ä¸‹æ–¹å‘ãŒãƒ—ãƒ©ã‚¹
+    // 1•b‚É60‰ñXV‚·‚éB‰æ–Ê‚Ì‰º•ûŒü‚ªƒvƒ‰ƒX
     velocityY += 0.5f;
     playerY += velocityY;
     state = onGround ? (playerX == previousX ? State::Idle : State::Run)
@@ -66,10 +91,10 @@ void Character::Update()
 
 void Character::CheckLanding(float left, float right, float top)
 {
-    // èƒ´ä½“ãƒ»è¶³ã®å¹…ã§æ¨ªã®é‡ãªã‚Šã‚’åˆ¤å®šã™ã‚‹
+    // “·‘ÌE‘«‚Ì•‚Å‰¡‚Ìd‚È‚è‚ğ”»’è‚·‚é
     const bool overlaps = playerX + 55 > left && playerX + 25 < right;
     onGround = false;
-    // ä¸Šæ˜‡ä¸­ã‚„ã€è¶³å ´ã®ä¸‹ã‹ã‚‰ã®æ¥è§¦ã¯é€šã‚ŠæŠœã‘ã‚‹
+    // ã¸’†‚âA‘«ê‚Ì‰º‚©‚ç‚ÌÚG‚Í’Ê‚è”²‚¯‚é
     if (velocityY >= 0.0f && overlaps &&
         previousY + FootOffset <= top && playerY + FootOffset >= top)
     {
