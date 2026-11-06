@@ -1,30 +1,42 @@
-ï»¿#include "DxLib.h"
+// ‚±‚Ìƒtƒ@ƒCƒ‹‚Åg‚¤ƒNƒ‰ƒX‚âŠÖ”‚ÌéŒ¾‚ğ“Ç‚İ‚ŞB
+#include "DxLib.h"
+// ‚±‚Ìƒtƒ@ƒCƒ‹‚Åg‚¤ƒNƒ‰ƒX‚âŠÖ”‚ÌéŒ¾‚ğ“Ç‚İ‚ŞB
 #include "Game.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
+    // ƒEƒBƒ“ƒhƒEƒ‚[ƒh‚Å‹N“®‚·‚éİ’èB
     ChangeWindowMode(TRUE);
+    // ‰æ–Ê‚Ì•E‚‚³EF‚Ìƒrƒbƒg”‚ğA‰Šú‰»‘O‚Éİ’è‚·‚éB
     SetGraphMode(480, 854, 32);
+    // ‰æ–ÊØ‚è‘Ö‚¦‚Ì‚’¼“¯Šú‘Ò‚¿‚ğ–³Œø‚É‚µA‰º‚ÌŠÔŒvZ‚ÅXV‚ğŠÇ—‚·‚éB
     SetWaitVSyncFlag(FALSE);
+    // DxLib‚ğ‰Šú‰»‚·‚éB¸”s‚µ‚½‚ç-1‚ğ•Ô‚µ‚ÄI—¹‚·‚éB
     if (DxLib_Init() == -1) return -1;
+    // ’¼Ú‰æ–Ê‚Éo‚³‚¸A— ‰æ–Ê‚Ö•`‰æ‚µ‚Ä‚©‚ç‚Ü‚Æ‚ß‚Ä•\¦‚·‚éB
     SetDrawScreen(DX_SCREEN_BACK);
 
+    // GameƒNƒ‰ƒX‚ÌÀ‘Ì‚ğì‚éBˆÈ~‚Ígame‚ğ’Ê‚¶‚ÄŠÖ”‚ğŒÄ‚ÔB
     Game game;
+    // ƒ‹[ƒv‚Ì‘O‚É1‰ñ‚¾‚¯AƒQ[ƒ€‚Åg‚¤‰æ‘œ‚ğ“Ç‚İ‚ŞB
     game.Load();
 
-    // æç”»é€Ÿåº¦ã«ä¾å­˜ã›ãšã€ç§»å‹•ãƒ»é‡åŠ›ã‚’1ç§’ã«60å›æ›´æ–°ã™ã‚‹
+    // •`‰æ‘¬“x‚ÉˆË‘¶‚¹‚¸AˆÚ“®Ed—Í‚ğ1•b‚É60‰ñXV‚·‚é
     const double step = 1000000.0 / 60.0;
     LONGLONG previousTime = GetNowHiPerformanceCount();
+    // double‚Í¬”‚ğˆµ‚¤Œ^B‚Ü‚¾XV‚Ég‚Á‚Ä‚¢‚È‚¢Œo‰ßŠÔ‚ğ‚½‚ß‚éB
     double accumulated = 0.0;
+    // while‚ÍğŒ‚ª¬‚è—§‚ÂŠÔŒJ‚è•Ô‚·B•Â‚¶‚é‘€ì‚âEsc‚Åƒ‹[ƒv‚ğI‚¦‚éB
     while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
     {
         const LONGLONG now = GetNowHiPerformanceCount();
         double elapsed = static_cast<double>(now - previousTime);
         previousTime = now;
-        // åœæ­¢ãƒ»ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç§»å‹•å¾Œã«å¤§é‡ã®æ›´æ–°ã‚’ã¾ã¨ã‚ã¦è¡Œã‚ãªã„
+        // ’â~EƒEƒBƒ“ƒhƒEˆÚ“®Œã‚É‘å—Ê‚ÌXV‚ğ‚Ü‚Æ‚ß‚Äs‚í‚È‚¢
         if (elapsed > 100000.0) elapsed = 100000.0;
         accumulated += elapsed;
         bool updated = false;
+        // 1‰ñ•ª‚ÌŠÔ‚ª‚½‚Ü‚é‚²‚Æ‚ÉƒQ[ƒ€‚ğXV‚·‚éB
         while (accumulated >= step)
         {
             game.Update();
@@ -33,12 +45,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
         }
         if (updated)
         {
+            // ‘O‚É•`‚¢‚½“à—e‚ğÁ‚µ‚ÄA¡‰ñ‚Ì•`‰æ‚ğn‚ß‚éB
             ClearDrawScreen();
             game.Draw();
+            // — ‰æ–Ê‚É•`‚«I‚¦‚½“à—e‚ğ‰æ–Ê‚Ö•\¦‚·‚éB
             ScreenFlip();
         }
+        // 1ƒ~ƒŠ•b‘Ò‚¿Aˆ—‚ğ‰ñ‚µ‘±‚¯‚ÄCPU‚ğg‚¢Ø‚é‚±‚Æ‚ğ—}‚¦‚éB
         WaitTimer(1);
     }
+    // DxLib‚ğI—¹‚µAg—p‚µ‚½‘Œ¹‚ğ•Ğ•t‚¯‚éB
     DxLib_End();
+    // ŒÄ‚Ño‚µŒ³‚É0‚ğ•Ô‚·Bmain‚Å‚Í³íI—¹ACamera‚ÌŒ»İ‚ÌÀ‘•‚Å‚ÍŒÅ’è‚ÌÀ•W0B
     return 0;
 }
