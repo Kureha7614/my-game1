@@ -6,15 +6,14 @@ class Camera
 // このクラスの内部から使う変数や型。
 private:
 	int CameraX = 0;
-	int CameraY = 0;
+	float CameraY = 0;
 // ほかのクラスから呼び出せる関数など。
 public:
-	Camera();
 	// 時間経過や入力に応じて状態を更新する処理。
-	void Update(int playerX, int playerY);
+	void Update(int playerX, float playerY);
 	// カメラのX座標を返す関数。現在のCPPは固定値0を返す仮実装。
 	int GetX() const;
 	// カメラのY座標を返す関数。現在のCPPは固定値0を返す仮実装。
-	int GetY() const;
+	float GetY() const;
 };
 

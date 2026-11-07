@@ -37,15 +37,21 @@ private:
     bool onGround = true;
     // 画像そのものではなく管理番号。-1は有効な画像がないことを表す。
     int imageHandle = -1;
+	bool IsGameOver = false;
 // ほかのクラスから呼び出せる関数など。
 public:
     // 画像などを読み込む処理。voidは戻り値を返さないという意味。
     void Load();
     // 画面に描く処理。移動の計算とは分けている。
-    void Draw();
+    void Draw(float CameraY);
     // 時間経過や入力に応じて状態を更新する処理。
     void Update();
     void UpdateAnimation();
     // 引数left・right・topは足場の左端・右端・上端。上から着地するか調べる。
     void CheckLanding(float left, float right, float top);
+	// キャラクターのX座標を返す関数。mainではカメラの位置計算に使う。
+    int GetX() const;
+	// キャラクターのY座標を返す関数。mainではカメラの位置計算に使う。
+    float GetY() const;
+    bool GetIsGameOver() const;
 };

@@ -9,9 +9,9 @@ void Ground::Load()
 }
 
 // 画面に描く処理。移動の計算とは分けている。
-void Ground::Draw()
+void Ground::Draw(float cameraY)
 {
 	// 左上と右下の座標で画像の表示範囲を指定する。最後は透過の有無。
-	DrawExtendGraph(x, y, x + width, y + height,imageHandle, TRUE);
+	DrawExtendGraph(x, y - cameraY, x + width, y + height - cameraY, imageHandle, TRUE);
 
 }

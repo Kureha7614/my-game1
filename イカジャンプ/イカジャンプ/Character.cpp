@@ -14,7 +14,7 @@ void Character::Load()
 
 
 // 画面に描く処理。移動の計算とは分けている。
-void Character::Draw()
+void Character::Draw(float cameraY)
 {
     // == は同じ値かの比較。画像がなければ、この関数をここで終了する。
     if (imageHandle == -1) return;
@@ -47,7 +47,7 @@ void Character::Draw()
     }
 
     // static_castで型を変換する。描画に渡すため、小数の位置を整数にする。
-    const int drawY = static_cast<int>(playerY);
+    const int drawY = static_cast<int>(playerY - cameraY);
 	if (facingLeft)
 	{
 		// 左向きに描画する場合は、画像を反転させる
@@ -60,6 +60,11 @@ void Character::Draw()
 		DrawRectExtendGraph(playerX, drawY, playerX + 80, drawY + 90,
 			sourceX, sourceY, 178, sourceHeight, imageHandle, TRUE);
 	}
+	//ゲームオーバー判定
+    if(playerY > cameraY + 854)
+    {
+        IsGameOver = true;
+    }
     
 }
 
@@ -163,6 +168,22 @@ void Character::CheckLanding(float left, float right, float top)
         state = velocityY < 0.0f ? State::Jump : State::Fall;
     }
 }
+int Character::GetX() const
+{
+	return playerX;
+}
+
+float Character::GetY() const
+{
+    return playerY;
+}
+
+bool Character::GetIsGameOver() const
+{
+    return IsGameOver;
+}
+  
+
 // 着地判定で状態が確定してから、表示するアニメーションを進める
 void Character::UpdateAnimation()
 {

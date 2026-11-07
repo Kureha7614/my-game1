@@ -2,12 +2,10 @@
 #pragma once
 // このファイルで使うクラスや関数の宣言を読み込む。
 #include"DxLib.h"
-// このファイルで使うクラスや関数の宣言を読み込む。
 #include"BackGround.h"
-// このファイルで使うクラスや関数の宣言を読み込む。
 #include"Ground.h"
-// このファイルで使うクラスや関数の宣言を読み込む。
 #include"Character.h"
+#include"Camera.h"
 // 関連するデータと処理をまとめるクラス。
 class Game
 {
@@ -16,6 +14,7 @@ private:
 	BackGround background;
 	Ground ground;
 	Character character;
+	Camera camera;
 // ほかのクラスから呼び出せる関数など。
 public:
 	enum Titol
@@ -24,6 +23,9 @@ public:
 		GameScene,
 		GameOver
 	};
+	// ゲームの状態を表す変数。初期値はタイトル画面。
+	Titol titol;
+	void SetTitol(Titol titol);
 	// 画像などを読み込む処理。voidは戻り値を返さないという意味。
 	void Load();
 	// 画面に描く処理。移動の計算とは分けている。

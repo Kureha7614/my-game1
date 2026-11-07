@@ -18,7 +18,7 @@ public:
 	// 画像などを読み込む処理。voidは戻り値を返さないという意味。
 	void Load();
 	// 画面に描く処理。移動の計算とは分けている。
-	void Draw();
+	void Draw(float cameraY);
 	float GetLeft() const { return static_cast<float>(x); }
 	float GetRight() const { return static_cast<float>(x + width); }
 	// 画像上端から約28%は透明な余白
